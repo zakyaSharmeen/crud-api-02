@@ -1,4 +1,6 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom';
 
 function Update() {
 
@@ -8,6 +10,8 @@ function Update() {
   const [email, setEmail] = useState("");
 
 
+  const history = useNavigate();
+
 
   // to show the data which is stored in local storage
   useEffect(() => {
@@ -15,9 +19,19 @@ function Update() {
     setName(localStorage.getItem("name"));
     setEmail(localStorage.getItem("email"));
 
-
-
   }, [])
+
+  const handleUpdate = (e) =>{
+    e.preventDefault()
+    axios.put(`https://663c835a17145c4d8c368762.mockapi.io/crud/${id}`,{
+      name: name, email: email,
+      
+     })
+     .then(() =>{
+      history("/read")
+     })
+     
+  }
 
 
 
@@ -26,7 +40,14 @@ function Update() {
 
   return (
     <>
-      <h2>UPDATE</h2>
+      <div className='d-flex justify-content-between m-2'>
+                <h2>Update</h2>
+                <Link to="/read">
+                <button className='btn btn-primary'>back</button>
+
+                </Link>
+
+            </div>
       <form>
         <div className="mb-3">
           <label className="form-label">Name</label>
@@ -48,7 +69,9 @@ function Update() {
 
 
         <button type="submit"
-          className="btn btn-primary">Update</button>
+          className="btn btn-primary" 
+          onClick={handleUpdate}
+          >Update</button>
       </form>
     </>
   )

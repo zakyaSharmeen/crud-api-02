@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 function Read() {
 
-   
+
 
 
 
@@ -12,6 +12,11 @@ function Read() {
 
     // to store the data
     const [data, setData] = useState([]);
+
+
+    // defining for toggle-dark n light
+    const [tabledark, setTabledark] = useState("");
+
 
 
 
@@ -34,14 +39,14 @@ function Read() {
     function handleDelete(id) {
         axios.delete(`https://663c835a17145c4d8c368762.mockapi.io/crud/${id}`)
             .then(() => {
-               getData()
+                getData()
             })
     }
 
 
 
     // storing the data in local storage to call the data while updating
-    const setLocalStorage = (id, name,email) =>{
+    const setLocalStorage = (id, name, email) => {
         localStorage.setItem("id", id)
         localStorage.setItem("name", name)
         localStorage.setItem("email", email)
@@ -66,8 +71,30 @@ function Read() {
 
     return (
         <>
-            <h1>READ </h1>
-            <table className="table">
+            {/* toggle-dark n light */}
+            <div className="form-check form-switch">
+                <input className="form-check-input" type="checkbox" 
+                onClick={() => {
+                    if(tabledark === 'table-dark'){
+                        setTabledark("")
+
+                    }
+                    else{
+                        setTabledark("table-dark")
+                    }
+                }}
+                />
+            </div>
+            <div className='d-flex justify-content-between m-2'>
+                <h2>READ</h2>
+                <Link to="/">
+                    <button className='btn btn-primary'>create</button>
+
+                </Link>
+
+            </div>
+            {/* fot toggle */}
+            <table className={`table ${tabledark}`}>
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -91,18 +118,18 @@ function Read() {
                                         <td>{eachData.name}</td>
                                         <td>{eachData.email}</td>
                                         <td><Link to="/update">
-                                        <button className='btn-success'
-                                        onClick={() => setLocalStorage(
-                                            eachData.id,
-                                            eachData.name,
-                                            eachData.email
-                                        )}
-                                         
-                                        >EDIt</button>
+                                            <button className='btn-success'
+                                                onClick={() => setLocalStorage(
+                                                    eachData.id,
+                                                    eachData.name,
+                                                    eachData.email
+                                                )}
+
+                                            >EDIt</button>
 
                                         </Link></td>
                                         <td><button className='btn-danger'
-                                        onClick={() => handleDelete(eachData.id)} 
+                                            onClick={() => handleDelete(eachData.id)}
                                         >DELETE</button></td>
 
                                     </tr>
